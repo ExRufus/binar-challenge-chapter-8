@@ -11,6 +11,10 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(errorHandler)
 
+// view engine setup
+app.set('view engine', 'ejs');
+app.set('views', './server/views');
+
 /**
  * @Routes /api
  * entrypoint for all API routes
