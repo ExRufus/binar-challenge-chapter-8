@@ -1,0 +1,685 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Challenge Chapter 8",
+    "version": "1.0.0",
+    "description": "Ini adalah dokumentasi"
+  },
+  "servers": [{ "url": "http://localhost:4000/api/v1" }],
+  "tags": [
+    {
+      "name": "player-id",
+      "description": "Everything about players"
+    },
+    {
+      "name": "players",
+      "description": "Everything about players"
+    }
+  ],
+  "paths": {
+    "/players/exp/{id}": {
+      "post": {
+        "tags": [
+          "player-id"
+        ],
+        "summary": "Update exp user",
+        "description": "data that needs to be updated",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existent user in the store",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateExpPlayer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/experiencePlayers"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/experiencePlayers"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user ID supplied"
+          },
+          "401": {
+            "description": "experience and lvl failed to update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/error"
+                  },
+                  "example": {
+                    "messages": "Some error occurred while processing."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NotFound"
+                  },
+                  "example": {
+                    "messages": "Cannot delete Player with id=${id}. Maybe Player was not found!."
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/error"
+                  },
+                  "example": {
+                    "messages": "Some error occurred while creating the Player."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players": {
+      "get": {
+        "tags": ["players"],
+        "summary": "Get All players",
+        "description": "Get All players",
+        "operationId": "getAllUser",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Players"
+                  },
+                  "example": {
+                    "result": "Success",
+                    "data": {
+                      "id": 1,
+                      "username": "BuyaHamka",
+                      "email": "buya@gmail.com",
+                      "password": "12345",
+                      "experience": 1000,
+                      "lvl": 10,
+                      "createdAt": "2023-04-06T18:26:57.593Z",
+                      "updatedAt": "2023-04-06T18:40:45.639Z"
+                    }
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Xmlplayers"
+                  },
+                  "example": {
+                    "result": "Success",
+                    "items": [
+                      {
+                        "Xmlplayers": {
+                          "id": 1,
+                          "username": "BuyaHamka",
+                          "email": "buya@gmail.com",
+                          "password": "12345",
+                          "experience": 1000,
+                          "lvl": 10
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/error"
+                  },
+                  "example": {
+                    "messages": "Some error occurred while creating the Player."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["players"],
+        "summary": "Creates list of players with given input array",
+        "description": "Creates list of players with given input array",
+        "operationId": "createplayersWithListInput",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CreatePlayers"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Done"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Done"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failedCreatePlayer401"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failedCreatePlayer402"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players/{id}": {
+      "get": {
+        "tags": [
+          "player-id"
+        ],
+        "summary": "Get user by ID",
+        "description": "Returns a single user with the specified ID",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to retrieve",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format":"int64"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Done"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Done"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid user ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/error"
+                  },
+                  "example": {
+                    "messages": "Player with ${1000} not found."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "player-id"
+        ],
+        "summary": "Update user",
+        "description": "data that needs to be updated",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existent user in the store",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updatePlayer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Done"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Done"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user ID supplied"
+          },
+          "401": {
+            "description": "experience and lvl failed to update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/error"
+                  },
+                  "example": {
+                    "messages": "Some error occurred while processing."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NotFound"
+                  },
+                  "example": {
+                    "messages": "Cannot delete Player with id=${id}. Maybe Player was not found!."
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/error"
+                  },
+                  "example": {
+                    "messages": "Some error occurred while creating the Player."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "player-id"
+        ],
+        "summary": "Delete user by ID",
+        "description": "Deletes a single user with the specified ID",
+        "operationId": "deleteUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Deleted"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Deleted"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/error"
+                  },
+                  "example": {
+                    "messages": "Cannot delete Player with id: 100. Maybe Player was not found!."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NotFound"
+                  },
+                  "example": {
+                    "result": "FAILED",
+                    "messages": "Cannot delete Player with id=${id}. Maybe Player was not found!."
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/error"
+                  },
+                  "example": {
+                    "messages": "Some error occurred while creating the Player."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Players": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "1"
+          },
+          "username": {
+            "type": "string",
+            "example":"BuyaHamka"
+          },
+          "email": {
+            "type": "string",
+            "example":"buya@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example":"12345"
+          },
+          "experience": {
+            "type": "integer",
+            "example": "1000"
+          },
+          "lvl": {
+            "type": "integer",
+            "example":10
+          }
+        },
+        "xml": { "name": "players" }
+      },
+      "CreatePlayers": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example":"BuyaHamka"
+          },
+          "email": {
+            "type": "string",
+            "example":"buya@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example":"12345"
+          },
+          "experience": {
+            "type": "integer",
+            "example": "1000"
+          }
+        },
+        "xml": { "name": "createplayers" }
+      },
+      "Done": {
+        "required": [
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": "1"
+          },
+          "username": {
+            "type": "string",
+            "example":"BuyaHamka"
+          },
+          "email": {
+            "type": "string",
+            "example":"buya@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example":"12345"
+          },
+          "experience": {
+            "type": "integer",
+            "example": "1000"
+          },
+          "lvl": {
+            "type": "integer",
+            "example":10
+          },
+          "createdAt": {
+            "type": "date",
+            "example":"2023-04-17T05:36:48.063Z"
+          },
+          "updatedAt": {
+            "type":"date",
+            "example": "2023-04-17T05:36:48.063Z"
+          } 
+        },
+        "xml": { "name": "done" }
+      },
+      "updatePlayer": {
+        "type":"object",
+        "properties":{
+          "exp": {
+            "example": "1000"
+          },
+          "lvl": {
+            "example":10
+          }
+        }
+      },
+      "updateExpPlayer": {
+        "type":"object",
+        "properties":{
+          "exp": {
+            "example": "1000"
+          },
+          "lvl": {
+            "example":10
+          }
+        }
+      },
+      "experiencePlayers": {
+        "type":"object",
+        "properties":{
+          "messages": {
+            "type": "Player with id = ${id} gain ${exp} experience. Total experience = ${player.experience}"
+          }
+        }
+      },
+      "failedCreatePlayer401": {
+        "type":"object",
+        "properties":{
+          "messages": {
+            "type": "username or email cannot empty"
+          }
+        }
+      },
+      "failedCreatePlayer402": {
+        "type":"object",
+        "properties":{
+          "messages": {
+            "type": "password cannot be empty"
+          }
+        }
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "Some error occurred while creating the Player."
+          }
+        }
+      },
+      "Deleted": {
+        "type":"object",
+        "properties":{
+          "messages": {
+            "type": "Player with id: ${id}, was deleted successfully"
+          }
+        }
+      },   
+      "NotFound": {
+        "type":"object",
+        "properties":{
+          "messages": {
+            "result":"FAILED",
+            "type": "Player with ${id} not found."
+          }
+        }
+      }   
+    },
+    "requestBodies": {
+      "xmlplayers": {
+        "description": "player object that needs to be added to the store",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Players"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/xmlplayers"
+            }
+          }
+        }
+      },
+      "experiencePlayer":{
+        "description": "player object that needs to be added to the store",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/experiencePlayers"
+            }
+          }
+        }
+      }
+    }
+  }
+}

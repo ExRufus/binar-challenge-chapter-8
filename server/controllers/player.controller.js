@@ -8,13 +8,13 @@ class PlayerController {
     try {
       const { username, email, password, experience } = req.body;
       if (!username || !email) {
-        return res.status(400).json({
+        return res.status(401).json({
           result: "Failed",
           message: "username or email cannot empty",
         });
       }
       if (!password) {
-        return res.status(400).json({
+        return res.status(402).json({
           result: "Failed",
           message: "password cannot be empty",
         });
